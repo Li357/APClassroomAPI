@@ -1,0 +1,23 @@
+{
+  "name": "apclassroomapi",
+  "version": "0.1.0",
+  "description": "API proxy for CollegeBoard's AP Classroom",
+  "repository": "https://github.com/Li357/APClassroomAPI.git",
+  "author": "Andrew Li",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^13.9.3",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^2.0.1",
+    "typescript": "^3.8.3"
+  },
+  "scripts": {
+    "typecheck": "npx tsc --noEmit",
+    "build": "npx tsc --outDir build",
+    "lint": "npx eslint src/**/*.ts"
+  }
+}
