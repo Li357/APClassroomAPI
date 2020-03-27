@@ -1,10 +1,15 @@
-import https, { RequestOptions } from 'https';
+import https from 'https';
 import url from 'url';
 import qs from 'querystring';
 import cookie from 'cookie';
 import { Request } from 'express';
 import sign from './sign';
-import { GraphQLCredentials, AWSCredentialsData, AWSService } from './types';
+import {
+  GraphQLCredentials,
+  AWSCredentialsData,
+  AWSService,
+  AWSRequest,
+} from './types';
 
 const LOGIN_URL = 'https://account.collegeboard.org/login/authenticateUser';
 const LOGIN_COOKIE_NAME = 'cb_login';
@@ -98,7 +103,7 @@ export function signRequest(
   req: Request,
   endpoint: AWSService,
   credentials: GraphQLCredentials
-): RequestOptions {
+): AWSRequest {
   const { host, path } = url.parse(endpoint.url);
   const normalized = {
     method: 'POST',
@@ -109,8 +114,8 @@ export function signRequest(
     service: endpoint.service,
     region: endpoint.region,
     url: endpoint.url,
-    host,
-    path,
+    host: host!, // eslint-disable-line @typescript-eslint/no-non-null-assertion
+    path: path!, // eslint-disable-line @typescript-eslint/no-non-null-assertion
     body: JSON.stringify(req.body),
   };
 
@@ -120,7 +125,7 @@ export function signRequest(
   return signedReq;
 }
 
-export function sendGraphQLRequest(options: RequestOptions): Promise<string> {
+export function sendGraphQLRequest(options: AWSRequest): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     const graphQLReq = https.request(options, (res) => {
       let data = '';

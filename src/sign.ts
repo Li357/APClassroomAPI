@@ -1,8 +1,7 @@
 import url from 'url';
 import crypto from 'crypto';
-import { Request } from 'express';
 import { IncomingHttpHeaders } from 'http';
-import { GraphQLCredentials, AWSService } from './types';
+import { GraphQLCredentials, AWSService, AWSRequest } from './types';
 
 function hmac(key: string | Buffer, src: string): Buffer {
   return crypto.createHmac('sha256', key).update(src, 'utf8').digest();
@@ -23,13 +22,13 @@ function getCanonicalHeaders(headers: IncomingHttpHeaders): string {
   }
 
   const canonical = keys
-    .map((key) => ({
-      key: key.toLowerCase(),
-      value:
-        headers[key] !== undefined
-          ? headers[key]!.trim().replace(/\s+/g, ' ')
-          : '',
-    }))
+    .map((key) => {
+      const value = headers[key] as string | undefined;
+      return {
+        key: key.toLowerCase(),
+        value: value !== undefined ? value.trim().replace(/\s+/g, ' ') : '',
+      };
+    })
     .sort((a, b) => (a.key < b.key ? -1 : 1))
     .map(({ key, value }) => `${key}:${value}`)
     .join('\n');
@@ -43,7 +42,7 @@ function getSignedHeaders(headers: IncomingHttpHeaders): string {
     .join(';');
 }
 
-function getCanonicalRequest(req: Request): string {
+function getCanonicalRequest(req: AWSRequest): string {
   const { path, query } = url.parse(req.url);
   return [
     req.method,
@@ -102,19 +101,16 @@ function getAuthorizationHeader(
 }
 
 export default function sign(
-  req: any,
+  req: AWSRequest,
   credentials: GraphQLCredentials,
   endpoint: AWSService
-): Request {
+): AWSRequest {
   const now = new Date();
   const dateTime = now.toISOString().replace(/[:-]|\.\d{3}/g, '');
   const date = dateTime.substring(0, 8);
   const algorithm = 'AWS4-HMAC-SHA256';
 
-  const { host } = url.parse(req.url);
-  /* eslint-disable @typescript-eslint/no-non-null-assertion */
-  req.headers['host'] = host!;
-  /* eslint-enable @typescript-eslint/no-non-null-assertion */
+  req.headers['host'] = req.host;
   req.headers['x-amz-date'] = dateTime;
   req.headers['X-Amz-Security-Token'] = credentials.sessionToken;
 

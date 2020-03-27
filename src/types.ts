@@ -39,3 +39,11 @@ export interface AWSService {
   service: string;
   region: string;
 }
+
+export interface AWSRequest extends AWSService {
+  method: string;
+  headers: Record<string, string>;
+  host: string;
+  path: string;
+  body: string;
+}
