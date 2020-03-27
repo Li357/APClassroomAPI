@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
+import helmet from 'helmet';
 import {
   login,
   provisionCredentials,
@@ -12,9 +13,10 @@ import {
   GenericResponse,
   GraphQLRequest,
 } from './types';
-import { UserError, asyncHandler } from './utils';
+import { UserError, asyncHandler, log } from './utils';
 
 const app = express();
+app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -63,8 +65,18 @@ app.all<{}, GenericResponse, {}>('*', (_, res) => {
 // next argument needed to maintain function signature
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  const status = err instanceof UserError ? 400 : 500;
+  const isUserError = err instanceof UserError;
+  if (isUserError) {
+    log(
+      `${err.message} when requesting ${req.method} ${req.url}. Stacktrace:\n${err.stack}`
+    );
+  }
+
+  const status = isUserError ? 400 : 500;
   res.status(status).json({ message: err.message });
 });
 
-app.listen(5000);
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  log(`AP Classroom API up and running at ${PORT}!`);
+});

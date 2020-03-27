@@ -10,6 +10,7 @@
     "@types/body-parser": "^1.19.0",
     "@types/cookie": "^0.3.3",
     "@types/express": "^4.17.3",
+    "@types/helmet": "^0.0.45",
     "@types/node": "^13.9.3",
     "@typescript-eslint/eslint-plugin": "^2.24.0",
     "@typescript-eslint/parser": "^2.24.0",
@@ -21,7 +22,6 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "typecheck": "npx tsc --noEmit",
     "build": "npx tsc --outDir build",
     "lint": "npx eslint src/**/*.ts"
   },
@@ -29,6 +29,7 @@
     "aws4": "^1.9.1",
     "body-parser": "^1.19.0",
     "cookie": "^0.4.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "helmet": "^3.22.0"
   }
 }
