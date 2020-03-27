@@ -1,3 +1,5 @@
+// see https://github.com/awslabs/aws-mobile-appsync-sdk-js/blob/master/packages/aws-appsync-auth-link/src/signer/signer.ts
+
 import url from 'url';
 import crypto from 'crypto';
 import { IncomingHttpHeaders } from 'http';

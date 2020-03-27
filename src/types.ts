@@ -1,4 +1,4 @@
-export interface Response {
+export interface GenericResponse {
   message: string;
 }
 
@@ -7,7 +7,7 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface LoginResponse extends Response {
+export interface LoginResponse extends GenericResponse {
   token: string;
 }
 
