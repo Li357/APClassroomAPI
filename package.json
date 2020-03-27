@@ -6,12 +6,17 @@
   "author": "Andrew Li",
   "license": "MIT",
   "devDependencies": {
+    "@types/aws4": "^1.5.1",
+    "@types/body-parser": "^1.19.0",
+    "@types/cookie": "^0.3.3",
+    "@types/express": "^4.17.3",
     "@types/node": "^13.9.3",
     "@typescript-eslint/eslint-plugin": "^2.24.0",
     "@typescript-eslint/parser": "^2.24.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
     "eslint-plugin-prettier": "^3.1.2",
+    "nodemon": "^2.0.2",
     "prettier": "^2.0.1",
     "typescript": "^3.8.3"
   },
@@ -19,5 +24,11 @@
     "typecheck": "npx tsc --noEmit",
     "build": "npx tsc --outDir build",
     "lint": "npx eslint src/**/*.ts"
+  },
+  "dependencies": {
+    "aws4": "^1.9.1",
+    "body-parser": "^1.19.0",
+    "cookie": "^0.4.0",
+    "express": "^4.17.1"
   }
 }
