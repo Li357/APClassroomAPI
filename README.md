@@ -1,13 +1,13 @@
 # AP Classroom API
 
-Unofficial wrapper for AP Classroom's GraphQL API at https://dgtkl2ep7natjmkbefhxflglie.appsync-api.us-east-1.amazonaws.com/graphql. Provisions temporary credentials then performs AWSv4 signing using IAM-based auth.
+Unofficial wrapper for AP Classroom's GraphQL API. Live at https://ap-classroom-api.now.sh.
 
 ### Usage
 
 First, send a POST request to the `/login` endpoint with a `username` and `password` as JSON body:
 
 ```js
-fetch('…/login', {
+fetch('https://ap-classroom-api.now.sh/login', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ fetch('…/login', {
 You'll get a token in response if your credentials are valid. This token can be used as Bearer authentication to make a request to the GraphQL API:
 
 ```js
-fetch('…/graphql', {
+fetch('https://ap-classroom-api.now.sh/graphql', {
   method: 'POST',
   headers: {
     Authorization: 'Bearer <Token>',

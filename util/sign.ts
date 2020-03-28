@@ -58,7 +58,7 @@ function getCanonicalRequest(req: AWSRequest): string {
 
 function getCredentialScope(
   date: string,
-  { region, service }: AWSService
+  { region, service }: AWSService,
 ): string {
   return [date, region, service, 'aws4_request'].join('/');
 }
@@ -67,7 +67,7 @@ function getStringToSign(
   algorithm: string,
   canonicalReq: string,
   date: string,
-  scope: string
+  scope: string,
 ): string {
   return [algorithm, date, scope, hash(canonicalReq)].join('\n');
 }
@@ -75,7 +75,7 @@ function getStringToSign(
 function getSigningKey(
   secretKey: string,
   date: string,
-  { region, service }: AWSService
+  { region, service }: AWSService,
 ): Buffer {
   const kDate = hmac(`AWS4${secretKey}`, date);
   const kRegion = hmac(kDate, region);
@@ -93,7 +93,7 @@ function getAuthorizationHeader(
   accessKey: string,
   scope: string,
   signedHeaders: string,
-  signature: string
+  signature: string,
 ): string {
   return [
     `${algorithm} Credential=${accessKey}/${scope}`,
@@ -105,7 +105,7 @@ function getAuthorizationHeader(
 export default function sign(
   req: AWSRequest,
   credentials: GraphQLCredentials,
-  endpoint: AWSService
+  endpoint: AWSService,
 ): AWSRequest {
   const now = new Date();
   const dateTime = now.toISOString().replace(/[:-]|\.\d{3}/g, '');
@@ -123,7 +123,7 @@ export default function sign(
     algorithm,
     requestString,
     dateTime,
-    scope
+    scope,
   );
 
   const signingKey = getSigningKey(credentials.secretAccessKey, date, endpoint);
@@ -134,7 +134,7 @@ export default function sign(
     credentials.accessKeyId,
     scope,
     getSignedHeaders(req.headers),
-    signature
+    signature,
   );
   req.headers['Authorization'] = authorization;
   return req;

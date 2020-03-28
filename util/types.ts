@@ -1,20 +1,3 @@
-export interface GenericResponse {
-  message: string;
-}
-
-export interface LoginRequest {
-  username: string;
-  password: string;
-}
-
-export interface LoginResponse extends GenericResponse {
-  token: string;
-}
-
-export interface GraphQLRequest {
-  token: string;
-}
-
 export interface AWSCredentials {
   AccessKeyId: string;
   SecretAccessKey: string;

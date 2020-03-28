@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "routes": [
+    {
+      "src": "/(.*)",
+      "headers": { "Access-Control-Allow-Origin": "*" },
+      "continue": true
+    },
+    {
+      "src": "/login",
+      "methods": ["POST"],
+      "dest": "/api/login.ts"
+    },
+    {
+      "src": "/graphql",
+      "methods": ["POST"],
+      "dest": "/api/graphql.ts"
+    }
+  ]
+}

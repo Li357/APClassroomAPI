@@ -2,7 +2,6 @@ import https from 'https';
 import url from 'url';
 import qs from 'querystring';
 import cookie from 'cookie';
-import { Request } from 'express';
 import sign from './sign';
 import {
   GraphQLCredentials,
@@ -40,7 +39,7 @@ export function login(username: string, password: string): Promise<string> {
       const loginCookie = cookies?.find((c) => c.includes(LOGIN_COOKIE_NAME));
       if (loginCookie === undefined) {
         return reject(
-          new Error('Authentication failed! Incorrect credentials')
+          new Error('Authentication failed! Incorrect credentials'),
         );
       }
 
@@ -55,7 +54,7 @@ export function login(username: string, password: string): Promise<string> {
 }
 
 export function provisionCredentials(
-  token: string
+  token: string,
 ): Promise<GraphQLCredentials> {
   return new Promise<GraphQLCredentials>((resolve, reject) => {
     const url = `${COGNITO_URL}&cacheNonce=${Date.now()}`;
@@ -74,7 +73,7 @@ export function provisionCredentials(
 
       res.on('end', () => {
         const { cbJwtToken: jwtToken, apfym }: AWSCredentialsData = JSON.parse(
-          data
+          data,
         );
         const {
           Credentials: {
@@ -100,9 +99,9 @@ export function provisionCredentials(
 }
 
 export function signRequest(
-  req: Request,
+  body: string,
   endpoint: AWSService,
-  credentials: GraphQLCredentials
+  credentials: GraphQLCredentials,
 ): AWSRequest {
   const { host, path } = url.parse(endpoint.url);
   const normalized = {
@@ -116,7 +115,7 @@ export function signRequest(
     url: endpoint.url,
     host: host!, // eslint-disable-line @typescript-eslint/no-non-null-assertion
     path: path!, // eslint-disable-line @typescript-eslint/no-non-null-assertion
-    body: JSON.stringify(req.body),
+    body,
   };
 
   const signedReq = sign(normalized, credentials, endpoint);
