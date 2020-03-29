@@ -5,8 +5,8 @@ export interface AWSCredentials {
 }
 
 export interface AWSCredentialsData {
-  apfym: { Credentials: AWSCredentials };
-  cbJwtToken: string;
+  apfym?: { Credentials: AWSCredentials };
+  cbJwtToken?: string;
 }
 
 export interface GraphQLCredentials {

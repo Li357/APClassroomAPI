@@ -38,12 +38,10 @@ export function login(username: string, password: string): Promise<string> {
       const cookies = res.headers['set-cookie'];
       const loginCookie = cookies?.find((c) => c.includes(LOGIN_COOKIE_NAME));
       if (loginCookie === undefined) {
-        return reject(
-          new Error('Authentication failed! Incorrect credentials'),
-        );
+        return reject(new Error('Invalid credentials!'));
       }
 
-      const { cb_login: loginToken } = cookie.parse(loginCookie);
+      const { [LOGIN_COOKIE_NAME]: loginToken } = cookie.parse(loginCookie);
       resolve(loginToken);
     });
 
@@ -72,22 +70,19 @@ export function provisionCredentials(
       });
 
       res.on('end', () => {
-        const { cbJwtToken: jwtToken, apfym }: AWSCredentialsData = JSON.parse(
-          data,
-        );
-        const {
-          Credentials: {
-            AccessKeyId: accessKeyId,
-            SecretAccessKey: secretAccessKey,
-            SessionToken: sessionToken,
-          },
-        } = apfym;
+        const { cbJwtToken, apfym }: AWSCredentialsData = JSON.parse(data);
+        if (!apfym || !cbJwtToken) {
+          return reject(new Error('Invalid token!'));
+        }
 
+        const {
+          Credentials: { AccessKeyId, SecretAccessKey, SessionToken },
+        } = apfym;
         resolve({
-          jwtToken,
-          accessKeyId,
-          secretAccessKey,
-          sessionToken,
+          accessKeyId: AccessKeyId,
+          secretAccessKey: SecretAccessKey,
+          sessionToken: SessionToken,
+          jwtToken: cbJwtToken,
           sessionId: token,
         });
       });

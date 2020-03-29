@@ -29,7 +29,7 @@ export default async function graphqlHandler(
     const awsRequest = signRequest(body, GRAPHQL_ENDPOINT, credentials);
     const data = await sendGraphQLRequest(awsRequest);
     res.status(200).json(JSON.parse(data));
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+  } catch {
+    res.status(401).json({ message: 'Invalid token!' });
   }
 }

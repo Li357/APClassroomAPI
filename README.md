@@ -46,3 +46,7 @@ fetch('https://ap-classroom-api.now.sh/graphql', {
     console.log(json);
   });
 ```
+
+### Testing
+
+Uses Jest. To run the entire test suite, set the `TEST_USERNAME` and `TEST_PASSWORD` environment variables with valid AP Classroom credentials.
